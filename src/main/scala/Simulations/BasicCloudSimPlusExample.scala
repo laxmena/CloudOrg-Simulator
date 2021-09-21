@@ -15,6 +15,7 @@ import collection.JavaConverters.*
 
 class BasicCloudSimPlusExample
 
+// Singleton: Companion Object
 object BasicCloudSimPlusExample:
   val config = ObtainConfigReference("cloudSimulator") match {
     case Some(value) => value
@@ -47,8 +48,10 @@ object BasicCloudSimPlusExample:
     logger.info(s"Created one virtual machine: $vmList")
 
     val utilizationModel = new UtilizationModelDynamic(config.getDouble("cloudSimulator.utilizationRatio"));
-    val cloudletList = new CloudletSimple(config.getLong("cloudSimulator.cloudlet.size"), config.getInt("cloudSimulator.cloudlet.PEs"), utilizationModel) ::
-      new CloudletSimple(config.getLong("cloudSimulator.cloudlet.size"), config.getInt("cloudSimulator.cloudlet.PEs"), utilizationModel) :: Nil
+    val cloudletList = new CloudletSimple(
+                          config.getLong("cloudSimulator.cloudlet.size"), 
+                          config.getInt("cloudSimulator.cloudlet.PEs"), utilizationModel) ::
+                              new CloudletSimple(config.getLong("cloudSimulator.cloudlet.size"), config.getInt("cloudSimulator.cloudlet.PEs"), utilizationModel) :: Nil
 
     logger.info(s"Created a list of cloudlets: $cloudletList")
 
