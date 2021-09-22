@@ -1,6 +1,8 @@
 package Experimentations
 
-import HelperUtils.{BrokerUtils, CreateLogger, ObtainConfigReference}
+import HelperUtils.Broker.BrokerUtils
+import HelperUtils.{CreateLogger, ObtainConfigReference}
+import org.cloudbus.cloudsim.core.CloudSim
 
 class CreateResourcesFromConfig
 
@@ -12,8 +14,10 @@ object CreateResourcesFromConfig {
 
   val logger = CreateLogger(classOf[CreateResourcesFromConfig])
   
-  def createResources(): Unit = 
+  def createResources(): Unit =
+    val simulation = new CloudSim()
     val simConfig = config.getConfig("simulation")
-    BrokerUtils.createDataCenters(simConfig)
+    BrokerUtils.createOrgResources(simulation, simConfig)
+    simulation.start()
     
 }

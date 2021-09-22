@@ -1,6 +1,6 @@
 package Experimentations
 
-import HelperUtils.ConfigModels.{CloudletModel, DataCenterModel}
+import HelperUtils.ConfigModels.{CloudletConfig, DataCenterConfig}
 import HelperUtils.{CreateLogger, ObtainConfigReference}
 import Simulations.BasicFirstExample
 import com.typesafe.config.{Config, ConfigBeanFactory, ConfigFactory}
@@ -20,7 +20,7 @@ object LoadConfig:
     val sConfig = config.getConfig("simulation")
     val datacenters = sConfig.getConfigList("datacenters").asScala
     val dcList = datacenters.map {
-                  ConfigBeanFactory.create(_, classOf[DataCenterModel])
+                  ConfigBeanFactory.create(_, classOf[DataCenterConfig])
                 }.toList
     logger.info(s"$dcList")
     
