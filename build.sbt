@@ -10,6 +10,7 @@ val typesafeConfigVersion = "1.4.1"
 val apacheCommonIOVersion = "2.11.0"
 val scalacticVersion = "3.2.9"
 val cloudSimPlusVersion = "6.5.0"
+val pureconfigVersion = "0.16.0"
 
 resolvers += Resolver.jcenterRepo
 
@@ -26,4 +27,4 @@ libraryDependencies ++= Seq(
   "org.cloudsimplus" % "cloudsim-plus" % cloudSimPlusVersion,
 )
 
-libraryDependencies += "com.github.pureconfig" %% "pureconfig" % "0.16.0"
+libraryDependencies += "com.github.pureconfig" %% "pureconfig" % pureconfigVersion

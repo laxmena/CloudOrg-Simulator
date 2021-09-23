@@ -122,7 +122,7 @@ object OrgUtils {
           broker.submitVmList(vmList.asJava)
           logger.info(s"Broker Submitted ${vmList.length} VMs")
         }
-        val cloudletList: List[Cloudlet] = CommonUtil.configureCloudlets(dc.cloudlets)
+        val cloudletList: List[Cloudlet] = CommonUtil.configureMultipleCloudlets(dc.cloudlets)
         if(cloudletList.length != 0) {
           broker.submitCloudletList(cloudletList.asJava)
           logger.info(s"Broker submitted ${cloudletList.length} Cloudlets")

@@ -27,7 +27,10 @@ object CommonUtil {
     logger.debug("Creating PE")
     new PeSimple(mips).asInstanceOf[Pe]
   }
-
+  
+  def configureMultipleVms(configList: List[VmConfig]): List[Vm] = {
+    configList.map(config => configureVms(config)).flatten
+  }
   /**
    * Configures List of VM instances from VmConfig object
    *
@@ -53,19 +56,18 @@ object CommonUtil {
     }).toList
     vmList
   }
-
-  def configureCloudlets(config: List[CloudletConfig]): List[Cloudlet] = {
+  
+  def configureCloudlet(config: CloudletConfig): List[Cloudlet] = {
+    (1 to config.count).map(_ => {
+      val cloudlet = new CloudletSimple(config.length, config.pes)
+      cloudlet.setSizes(config.size)
+      cloudlet
+    }).toList
+  }
+  
+  def configureMultipleCloudlets(config: List[CloudletConfig]): List[Cloudlet] = {
     logger.info("Configuring Cloudlets")
-
 //    val utilizationModel: UtilizationModel = new UtilizationModel()
-    def configureCloudlet(config: CloudletConfig): List[Cloudlet] = {
-      (1 to config.count).map(_ => {
-        val cloudlet = new CloudletSimple(config.length, config.pes)
-        cloudlet.setSizes(config.size)
-        cloudlet
-      }).toList
-    }
-
     config.map(cloudletConfig => configureCloudlet(cloudletConfig)).flatten
   }
 

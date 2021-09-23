@@ -1,6 +1,6 @@
 package Experimentations
 
-import HelperUtils.{CreateLogger, ObtainConfigReference, OrgUtils}
+import HelperUtils.{ClientUtil, CreateLogger, ObtainConfigReference, OrgUtils}
 import org.cloudbus.cloudsim.brokers.DatacenterBrokerSimple
 import org.cloudbus.cloudsim.core.CloudSim
 import org.cloudbus.cloudsim.datacenters.Datacenter
@@ -18,11 +18,15 @@ object CreateResourcesFromConfig {
   
   def createResources(configName: String): Unit =
     val simulation = new CloudSim()
+
     val simConfig = config.getConfig(configName)
+    val clientConfig = config.getConfig("client")
+
     val broker = new DatacenterBrokerSimple(simulation)
 
     OrgUtils.createOrgResources(simulation, broker, simConfig)
-    
+    ClientUtil.createClientResources(broker, clientConfig)
+
     simulation.start()
 
     val finishedCloudlets = broker.getCloudletFinishedList()
