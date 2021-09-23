@@ -11,9 +11,7 @@ object Simulation:
 
   @main def runSimulation =
     logger.info("Constructing a cloud model...")
-//    CostExample.Start()
-//    LoadConfig.start()
-    CreateResourcesFromConfig.createResources()
+    CreateResourcesFromConfig.createResources("simulation")
     logger.info("Finished cloud simulation...")
 
 class Simulation

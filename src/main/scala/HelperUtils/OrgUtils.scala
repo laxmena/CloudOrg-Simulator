@@ -1,29 +1,31 @@
-package HelperUtils.Broker
+package HelperUtils
 
 import HelperUtils.ConfigModels.{DataCenterConfig, HostConfig, VmConfig}
-import HelperUtils.{CreateLogger, ObtainConfigReference}
+import HelperUtils.{CommonUtil, CreateLogger, ObtainConfigReference}
 import Simulations.BasicFirstExample
 import com.typesafe.config.{Config, ConfigBeanFactory, ConfigList}
-import org.cloudbus.cloudsim.datacenters.Datacenter
-import org.cloudbus.cloudsim.hosts.HostSimple
 import org.cloudbus.cloudsim.allocationpolicies.{VmAllocationPolicyBestFit, VmAllocationPolicyFirstFit, VmAllocationPolicyRoundRobin, VmAllocationPolicySimple}
+import org.cloudbus.cloudsim.brokers.{DatacenterBroker, DatacenterBrokerSimple}
+import org.cloudbus.cloudsim.cloudlets.Cloudlet
+import org.cloudbus.cloudsim.core.CloudSim
+import org.cloudbus.cloudsim.datacenters.Datacenter
 import org.cloudbus.cloudsim.datacenters.network.NetworkDatacenter
+import org.cloudbus.cloudsim.hosts.HostSimple
 import org.cloudbus.cloudsim.hosts.network.NetworkHost
 import org.cloudbus.cloudsim.resources.{Pe, PeSimple}
 import org.cloudbus.cloudsim.schedulers.vm.{VmScheduler, VmSchedulerSpaceShared, VmSchedulerTimeShared}
-import org.cloudbus.cloudsim.core.CloudSim
 import org.cloudbus.cloudsim.vms.{Vm, VmSimple}
 
 import scala.jdk.CollectionConverters.*
 
-class BrokerUtils
+class OrgUtils
 
-object BrokerUtils {
+object OrgUtils {
   val brokerConfig = ObtainConfigReference("instances") match {
     case Some(value) => value
     case None => throw new RuntimeException("Cannot obtain a reference to the config data.")
   }
-  val logger = CreateLogger(classOf[BrokerUtils])
+  val logger = CreateLogger(classOf[OrgUtils])
 
   /**
    * Create Organization Resources from Config Files
@@ -31,9 +33,10 @@ object BrokerUtils {
    * @param config Configuration files that specifies the Organization
    *               Infrastructure.
    * */
-  def createOrgResources(simulation: CloudSim, config: Config) = {
+  def createOrgResources(simulation: CloudSim, broker: DatacenterBroker,  config: Config) = {
     logger.info("Logging: ", config)
-    val datacenters = laodDCsFromConfig(simulation, config)
+    val datacenters = laodDCsFromConfig(simulation, broker, config)
+    broker.setVmDestructionDelay(20.0)
 
     logger.info(s"Total DataCenters: ${datacenters}")
   }
@@ -45,7 +48,7 @@ object BrokerUtils {
    *               the specification of the DataCenters, with associatated
    *               hosts and vms.
    * */
-  def laodDCsFromConfig(simulation: CloudSim, config: Config) = {
+  def laodDCsFromConfig(simulation: CloudSim, broker: DatacenterBroker, config: Config) = {
     logger.info(s"Loading DataCenters from Config")
     val configList = config.getConfigList("datacenters").asScala
     logger.info(s"Total DataCenters Count: ${configList.length}")
@@ -53,22 +56,29 @@ object BrokerUtils {
     val datacenters = configList.map(dcConfig => {
       val dcType: String = dcConfig.getString("dcType")
       logger.info(s"Loading $dcType Datacenter")
-      configureDataCenter(
+      createDataCenter(
         simulation,
+        broker,
         ConfigBeanFactory.create(dcConfig, classOf[DataCenterConfig])
       )
     }).toList
+
     datacenters
   }
 
-  def configureDataCenter(simulation: CloudSim, dc: DataCenterConfig): Datacenter = {
+  /**
+   * Creates NetworkDataCenter Objects for the given Cofiguration
+   *
+   * @param simulation CloudSim object
+   * @param dc DataCenter Configuration Object
+   * @return DataCenter NetworkDataCenter object created with provided config
+   *
+   * */
+  def createDataCenter(simulation: CloudSim, broker: DatacenterBroker, dc: DataCenterConfig): Datacenter = {
     logger.info("Configuring DataCenter")
 
-    val hosts: List[NetworkHost] = configureHosts(dc.hosts)
-    val vmList: List[Vm] = dc.vms.flatMap(vmConfig => configureVms(vmConfig))
-
-    logger.info(s"Number of Hosts assigned: ${hosts.length}")
-    logger.info(s"Number of VM's configured: ${vmList.length}")
+    val hostList: List[NetworkHost] = configureHosts(dc.hosts)
+    logger.info(s"Number of Hosts assigned: ${hostList.length}")
 
     val allocationPolicy = {
       dc.allocationPolicy match {
@@ -84,7 +94,8 @@ object BrokerUtils {
     }
     logger.info(s"VM Allocation Policy: ${dc.allocationPolicy}")
 
-    val datacenter = new NetworkDatacenter(simulation, hosts.asJava, allocationPolicy)
+    val datacenter = new NetworkDatacenter(simulation, hostList.asJava, allocationPolicy)
+    datacenter.setSchedulingInterval(dc.schedulingInterval)
 
     datacenter
       .getCharacteristics
@@ -94,16 +105,56 @@ object BrokerUtils {
       .setCostPerSecond(dc.costPerSecond)
     logger.info("Setting Costs for Bandwidth, Storage, Memory and Per-Second")
 
+    dc.dcType match {
+      case "IAAS" => Nil
+      case "PAAS" => {
+        val vmList: List[Vm] =
+          dc.vms.flatMap(vmConfig => CommonUtil.configureVms(vmConfig))
+        if(vmList.length != 0) {
+          broker.submitVmList(vmList.asJava)
+          logger.info(s"Broker Submitted ${vmList.length} VMs")
+        }
+      }
+      case "SAAS" => {
+        val vmList: List[Vm] =
+          dc.vms.flatMap(vmConfig => CommonUtil.configureVms(vmConfig))
+        if(vmList.length != 0) {
+          broker.submitVmList(vmList.asJava)
+          logger.info(s"Broker Submitted ${vmList.length} VMs")
+        }
+        val cloudletList: List[Cloudlet] = CommonUtil.configureCloudlets(dc.cloudlets)
+        if(cloudletList.length != 0) {
+          broker.submitCloudletList(cloudletList.asJava)
+          logger.info(s"Broker submitted ${cloudletList.length} Cloudlets")
+          logger.info(s"${cloudletList.head}")
+        }
+      }
+    }
+
     datacenter
   }
 
+  /**
+   * Create List of NetworkHosts for the Given Host Configurations
+   *
+   * @param hostConfigs: List of HostConfig objects
+   * @return List[NetworkHost]: List of Network Hosts for the corresponding
+   *         HostConfig Objects
+   * */
   def configureHosts(hostConfigs: List[HostConfig]): List[NetworkHost] = {
     logger.info(s"Received List of ${hostConfigs.length} Hosts")
     hostConfigs.map(config => configureSingleHost(config)).toList
   }
 
+  /**
+   * Creates Single Network Host from the HostConfig object
+   *
+   * @param hostConfig HostConfig instance
+   * @return NetworkHost NetworkHost object with configurations from
+   *         HostConfig object
+   * */
   def configureSingleHost(hostConfig: HostConfig): NetworkHost = {
-    val pes = (1 to hostConfig.pes).map { _ => configurePeSimple(hostConfig.mips) }.toList
+    val pes = (1 to hostConfig.pes).map { _ => CommonUtil.configurePe(hostConfig.mips) }.toList
     val host = new NetworkHost(hostConfig.ram, hostConfig.bandwidth, hostConfig.storage, pes.asJava)
     val vmScheduler = hostConfig.vmScheduler match {
       case "TimeShared" => new VmSchedulerTimeShared()
@@ -113,26 +164,7 @@ object BrokerUtils {
     host.setVmScheduler(vmScheduler)
     logger.info(s"Configuring Host with ${hostConfig.vmScheduler} Scheduling Policy")
     host
+
   }
 
-  def configurePeSimple(mips: Double): Pe = {
-    new PeSimple(mips).asInstanceOf[Pe]
-  }
-
-  def configureVms(config: VmConfig): List[Vm] = {
-    val instances = brokerConfig.getConfig("instances")
-    val instanceType = config.instanceType
-    
-    val count = config.count
-    val instanceConfig = instances.getConfig(instanceType)
-    val vmList = (1 to count).map( _ => {
-      val vm = new VmSimple(instanceConfig.getLong("mips"),
-                            instanceConfig.getLong("pes"))
-      vm.setRam(instanceConfig.getLong("ram"))
-        .setBw(instanceConfig.getLong("bw"))
-        .setSize(instanceConfig.getLong("size"))
-      vm
-    }).toList
-    vmList
-  }
 }
