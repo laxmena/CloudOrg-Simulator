@@ -1,6 +1,5 @@
-import HelperUtils.{CreateLogger, ObtainConfigReference}
+import HelperUtils.{CreateLogger, ObtainConfigReference, Simulator}
 import Experimentations.{CreateResourcesFromConfig, LoadConfig}
-import Simulations.Simulator
 import com.typesafe.config.ConfigFactory
 import org.cloudbus.cloudsim.brokers.DatacenterBrokerSimple
 import org.slf4j.LoggerFactory

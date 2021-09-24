@@ -1,6 +1,5 @@
 import Experimentations.{CreateResourcesFromConfig, LoadConfig}
-import HelperUtils.{CreateLogger, ObtainConfigReference}
-import Simulations.Simulator
+import HelperUtils.{CreateLogger, ObtainConfigReference, Simulator}
 import com.typesafe.config.{Config, ConfigFactory}
 import org.cloudbus.cloudsim.brokers.DatacenterBrokerSimple
 import org.cloudbus.cloudsim.core.CloudSim

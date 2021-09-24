@@ -1,12 +1,11 @@
-import HelperUtils.{CreateLogger, ObtainConfigReference}
+import HelperUtils.{CreateLogger, ObtainConfigReference, Simulator}
 import Experimentations.{CreateResourcesFromConfig, LoadConfig}
-import Simulations.Simulator
 import org.cloudbus.cloudsim.brokers.DatacenterBrokerSimple
 import org.slf4j.LoggerFactory
 import org.cloudbus.cloudsim.core.CloudSim
 import com.typesafe.config.{Config, ConfigFactory}
 
-import scala.jdk.CollectionConverters._
+import scala.jdk.CollectionConverters.*
 /**
  * Compare VM Allocation Policies with same configrations for VM, Hosts and Cloudlets.
  *
