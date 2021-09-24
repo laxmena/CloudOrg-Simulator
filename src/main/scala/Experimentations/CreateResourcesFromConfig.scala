@@ -9,9 +9,9 @@ import org.cloudsimplus.builders.tables.CloudletsTableBuilder
 class CreateResourcesFromConfig
 
 object CreateResourcesFromConfig {
-  val config = ObtainConfigReference("simulation") match {
+  val config = ObtainConfigReference("experiment") match {
     case Some(value) => value
-    case None => throw new RuntimeException("Cannot obtain a reference to the config data.")
+    case None => throw new RuntimeException("Cannot obtain a reference to the experiment config data.")
   }
 
   val logger = CreateLogger(classOf[CreateResourcesFromConfig])
@@ -19,8 +19,8 @@ object CreateResourcesFromConfig {
   def createResources(configName: String): Unit = {
     val simulation = new CloudSim()
 
-    val orgConfig = config.getConfig("simulation")
-    val clientConfig = config.getConfig("client")
+    val orgConfig = config.getConfig("organization1")
+    val clientConfig = config.getConfig("client1")
 
     val broker = new DatacenterBrokerSimple(simulation)
     // Create Organization Resources metioned in the Org conifg

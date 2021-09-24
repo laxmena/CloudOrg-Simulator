@@ -66,6 +66,7 @@ object OrgUtils {
    * Creates NetworkDataCenter Objects for the given Configuration
    *
    * @param simulation CloudSim object
+   * @param broker DatacenterBroker
    * @param dc DataCenter Configuration Object
    * @return DataCenter NetworkDataCenter object created with provided config
    *

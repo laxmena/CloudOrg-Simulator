@@ -106,6 +106,20 @@ object Simulator {
       case None => throw new RuntimeException(s"Cannot obtain a reference to the Client config data. ${clientConfigStr}")
     }
 
+    runSimulation(orgConfig, clientConfig)
+  }
+
+  /**
+   * Runs simulation based on the Organization and Client Config objects as parameters.
+   * Creates its own CloudSim Simulation object and DatacenterBrokerSimple object.
+   *
+   * @param orgConfig Identifier of the Organization Config to simulate
+   * @param clientConfig Identifier of the Client Config to simulate
+   *
+   * */
+  def runSimulation(orgConfig: Config,
+                    clientConfig: Config): Unit = {
+
     // Create Simulation and DatacenterBroker object
     val simulation = new CloudSim()
     val broker = new DatacenterBrokerSimple(simulation)

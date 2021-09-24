@@ -14,8 +14,8 @@ object Simulation {
 
     logger.info("Simulation 1 - IAAS Model")
 
-    Simulator.runSimulation( "simulation1.org",
-      "simulation1.client")
+    Simulator.runSimulation( "simulation4.org",
+      "simulation4.client")
 
     logger.info("Finished cloud simulation...")
 }
