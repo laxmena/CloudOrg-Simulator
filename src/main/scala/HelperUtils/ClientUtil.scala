@@ -120,6 +120,7 @@ object ClientUtil {
       logger.info(s"Creating Cloudlets for IAAS Client")
       // Create Cloudlets from IaasClientConfig
       val cloudletList = CommonUtil.configureMultipleCloudlets(iaasClient.cloudlets)
+//      val cloudletList = CommonUtil.configureMultipleCloudletsWithURatio(iaasClient.cloudlets, 0.3)
       if (cloudletList.length != 0)
         broker.submitCloudletList(cloudletList.asJava)
       logger.info(s"Configured Cloudlets count: ${cloudletList.length}")

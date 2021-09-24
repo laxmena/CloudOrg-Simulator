@@ -28,7 +28,6 @@ object CommonUtil {
    * @return Pe PeSimple instance with provided mips value
    * */
   def configurePe(mips: Double): Pe = {
-    logger.debug("Creating PE")
     new PeSimple(mips).asInstanceOf[Pe]
   }
 
@@ -118,8 +117,12 @@ object CommonUtil {
    * @return List[Cloudlet]
    * */
   def configureMultipleCloudletsWithURatio(config: List[CloudletConfig], uRatio: Double): List[Cloudlet] = {
+    val cloudletsCount = config.map(c => c.count).toList.sum
+    val maxRatio = 1.0/cloudletsCount
+    val ratio: Double = if(maxRatio < uRatio) maxRatio else uRatio
+    logger.info(s"Setting uRatio: ${ratio}")
     config.map(cloudletConfig => {
-      configureCloudletWithURatio(cloudletConfig, uRatio)
+      configureCloudletWithURatio(cloudletConfig, ratio)
     }).flatten
   }
 

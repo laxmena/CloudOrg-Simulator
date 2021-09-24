@@ -32,7 +32,7 @@ object OrgUtils {
   def createOrgResources(simulation: CloudSim, broker: DatacenterBroker,  config: Config) = {
     logger.info("Logging: ", config)
     val datacenters = laodDCsFromConfig(simulation, broker, config)
-    broker.setVmDestructionDelay(20.0)
+    broker.setVmDestructionDelay(1.0)
 
     logger.info(s"Total DataCenters: ${datacenters}")
   }

@@ -12,7 +12,10 @@ object Simulation {
   @main def runSimulation =
     logger.info("Constructing a cloud model...")
 
-    Simulator.runSimulation( "simulation1.organization1", "client1")
+    logger.info("Simulation 1 - IAAS Model")
+
+    Simulator.runSimulation( "simulation1.org",
+      "simulation1.client")
 
     logger.info("Finished cloud simulation...")
 }
