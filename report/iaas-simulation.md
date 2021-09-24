@@ -46,3 +46,5 @@ If the requesting VM requires more resources than the DataCenter's available res
 Sometimes if the previous VM's are not destroyed, the VM's in the queue may not be allocated resources till the other VM's release them.
 
 Resources scaling and Utilization ration can be made use of to avoid this forever wait queue. 
+
+[<< Back to Index](README.md)
