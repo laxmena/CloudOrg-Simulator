@@ -1,22 +1,18 @@
 package HelperUtils
 
-import HelperUtils.ConfigModels.{DataCenterConfig, HostConfig, VmConfig}
-import HelperUtils.{CommonUtil, CreateLogger, ObtainConfigReference}
-import Simulations.BasicFirstExample
-import com.typesafe.config.{Config, ConfigBeanFactory, ConfigList}
+import HelperUtils.ConfigModels.{DataCenterConfig, HostConfig}
+import com.typesafe.config.{Config, ConfigBeanFactory}
 import org.cloudbus.cloudsim.allocationpolicies.{VmAllocationPolicyBestFit, VmAllocationPolicyFirstFit, VmAllocationPolicyRoundRobin, VmAllocationPolicySimple}
-import org.cloudbus.cloudsim.brokers.{DatacenterBroker, DatacenterBrokerSimple}
+import org.cloudbus.cloudsim.brokers.{DatacenterBroker}
 import org.cloudbus.cloudsim.cloudlets.Cloudlet
 import org.cloudbus.cloudsim.core.CloudSim
 import org.cloudbus.cloudsim.datacenters.Datacenter
 import org.cloudbus.cloudsim.datacenters.network.NetworkDatacenter
-import org.cloudbus.cloudsim.hosts.HostSimple
 import org.cloudbus.cloudsim.hosts.network.NetworkHost
-import org.cloudbus.cloudsim.resources.{Pe, PeSimple}
-import org.cloudbus.cloudsim.schedulers.vm.{VmScheduler, VmSchedulerSpaceShared, VmSchedulerTimeShared}
-import org.cloudbus.cloudsim.vms.{Vm, VmSimple}
+import org.cloudbus.cloudsim.schedulers.vm.{ VmSchedulerSpaceShared, VmSchedulerTimeShared}
+import org.cloudbus.cloudsim.vms.{Vm}
 
-import scala.jdk.CollectionConverters.*
+import scala.jdk.CollectionConverters._
 
 class OrgUtils
 
@@ -67,7 +63,7 @@ object OrgUtils {
   }
 
   /**
-   * Creates NetworkDataCenter Objects for the given Cofiguration
+   * Creates NetworkDataCenter Objects for the given Configuration
    *
    * @param simulation CloudSim object
    * @param dc DataCenter Configuration Object
@@ -77,9 +73,11 @@ object OrgUtils {
   def createDataCenter(simulation: CloudSim, broker: DatacenterBroker, dc: DataCenterConfig): Datacenter = {
     logger.info("Configuring DataCenter")
 
+    // Create Hosts list objects from DataCenterConfig object
     val hostList: List[NetworkHost] = configureHosts(dc.hosts)
     logger.info(s"Number of Hosts assigned: ${hostList.length}")
 
+    // Select Allocation Policy based on Config file input
     val allocationPolicy = {
       dc.allocationPolicy match {
         case "Simple" => new VmAllocationPolicySimple()
@@ -94,9 +92,11 @@ object OrgUtils {
     }
     logger.info(s"VM Allocation Policy: ${dc.allocationPolicy}")
 
+    // Create Network datacenters with Hosts and chosed allocation policy
     val datacenter = new NetworkDatacenter(simulation, hostList.asJava, allocationPolicy)
     datacenter.setSchedulingInterval(dc.schedulingInterval)
 
+    // Set costs based on input configurations
     datacenter
       .getCharacteristics
       .setCostPerBw(dc.costPerBw)
@@ -105,6 +105,10 @@ object OrgUtils {
       .setCostPerSecond(dc.costPerSecond)
     logger.info("Setting Costs for Bandwidth, Storage, Memory and Per-Second")
 
+    // Create VMs and Cloudlets based on the Type of DataCenter
+    // Dedicated IAAS Datacenter will not have any custom VM or cloudlet hosted.
+    // Dedicated SAAS Datacenter will create VMs and specified cloudlet services
+    // Dedicated PAAS Datacenter will create VMs specified by the orgaization
     dc.dcType match {
       case "IAAS" => Nil
       case "PAAS" => {
@@ -130,7 +134,7 @@ object OrgUtils {
         }
       }
     }
-
+    // Return the created Datacenter
     datacenter
   }
 
@@ -156,11 +160,14 @@ object OrgUtils {
   def configureSingleHost(hostConfig: HostConfig): NetworkHost = {
     val pes = (1 to hostConfig.pes).map { _ => CommonUtil.configurePe(hostConfig.mips) }.toList
     val host = new NetworkHost(hostConfig.ram, hostConfig.bandwidth, hostConfig.storage, pes.asJava)
+
+    // Set Vm Scheduler based on the configurations
     val vmScheduler = hostConfig.vmScheduler match {
       case "TimeShared" => new VmSchedulerTimeShared()
       case "SpaceShared" => new VmSchedulerSpaceShared()
       case _ => new VmSchedulerTimeShared()
     }
+
     host.setVmScheduler(vmScheduler)
     logger.info(s"Configuring Host with ${hostConfig.vmScheduler} Scheduling Policy")
     host

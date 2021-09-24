@@ -1,6 +1,6 @@
 package Experimentations
 
-import HelperUtils.{ClientUtil, CreateLogger, ObtainConfigReference, OrgUtils}
+import HelperUtils.{ClientUtil, CommonUtil, CreateLogger, ObtainConfigReference, OrgUtils}
 import org.cloudbus.cloudsim.brokers.DatacenterBrokerSimple
 import org.cloudbus.cloudsim.core.CloudSim
 import org.cloudbus.cloudsim.datacenters.Datacenter
@@ -16,21 +16,25 @@ object CreateResourcesFromConfig {
 
   val logger = CreateLogger(classOf[CreateResourcesFromConfig])
   
-  def createResources(configName: String): Unit =
+  def createResources(configName: String): Unit = {
     val simulation = new CloudSim()
 
-    val simConfig = config.getConfig(configName)
+    val orgConfig = config.getConfig("simulation")
     val clientConfig = config.getConfig("client")
 
     val broker = new DatacenterBrokerSimple(simulation)
+    // Create Organization Resources metioned in the Org conifg
+    OrgUtils.createOrgResources(simulation, broker, orgConfig)
 
-    OrgUtils.createOrgResources(simulation, broker, simConfig)
+    // Create Client Request Resources
     ClientUtil.createClientResources(broker, clientConfig)
 
+    // Start Simulation
     simulation.start()
 
     val finishedCloudlets = broker.getCloudletFinishedList()
     new CloudletsTableBuilder(finishedCloudlets).build()
-
+    CommonUtil.logTotalVmsCost(broker)
+  }
     
 }

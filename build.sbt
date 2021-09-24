@@ -27,4 +27,4 @@ libraryDependencies ++= Seq(
   "org.cloudsimplus" % "cloudsim-plus" % cloudSimPlusVersion,
 )
 
-libraryDependencies += "com.github.pureconfig" %% "pureconfig" % pureconfigVersion
+libraryDependencies += "com.github.pureconfig" %% "pureconfig-core" % pureconfigVersion

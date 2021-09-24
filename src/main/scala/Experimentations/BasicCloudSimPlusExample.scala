@@ -1,4 +1,4 @@
-package Simulations
+package Experimentations
 
 import HelperUtils.{CreateLogger, ObtainConfigReference}
 import org.cloudbus.cloudsim.brokers.DatacenterBrokerSimple
@@ -11,7 +11,7 @@ import org.cloudbus.cloudsim.utilizationmodels.UtilizationModelDynamic
 import org.cloudbus.cloudsim.vms.VmSimple
 import org.cloudsimplus.builders.tables.CloudletsTableBuilder
 
-import collection.JavaConverters.*
+import scala.collection.JavaConverters.*
 
 class BasicCloudSimPlusExample
 
@@ -49,7 +49,7 @@ object BasicCloudSimPlusExample:
 
     val utilizationModel = new UtilizationModelDynamic(config.getDouble("cloudSimulator.utilizationRatio"));
     val cloudletList = new CloudletSimple(
-                          config.getLong("cloudSimulator.cloudlet.size"), 
+                          config.getLong("cloudSimulator.cloudlet.size"),
                           config.getInt("cloudSimulator.cloudlet.PEs"), utilizationModel) ::
                               new CloudletSimple(config.getLong("cloudSimulator.cloudlet.size"), config.getInt("cloudSimulator.cloudlet.PEs"), utilizationModel) :: Nil
 

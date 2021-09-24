@@ -17,7 +17,7 @@ object BrokerWorkflow {
 
   val logger = CreateLogger(classOf[CreateResourcesFromConfig])
 
-  def createResources(configName: String): Unit =
+  def createResources(configName: String): Unit = {
     val simulation = new CloudSim()
     val simConfig = config.getConfig(configName)
     val broker = new DatacenterBrokerSimple(simulation)
@@ -27,4 +27,5 @@ object BrokerWorkflow {
 
     val finishedCloudlets = broker.getCloudletFinishedList()
     new CloudletsTableBuilder(finishedCloudlets).build()
+  }
 }
