@@ -7,6 +7,12 @@ import com.typesafe.config.{Config, ConfigBeanFactory, ConfigList}
 
 import scala.jdk.CollectionConverters._
 
+/**
+ * Util method to support Client Operations.
+ * 
+ * Helps creating resources for IAAS, SAAS and PAAS client requests.
+ *
+ * */
 class ClientUtil
 
 object ClientUtil {

@@ -5,7 +5,10 @@ import HelperUtils.{CommonUtil, CreateLogger, ObtainConfigReference, OrgUtils}
 import org.cloudbus.cloudsim.brokers.DatacenterBrokerSimple
 import org.cloudbus.cloudsim.core.CloudSim
 import org.cloudsimplus.builders.tables.CloudletsTableBuilder
-
+/**
+ * Experiments. Trial and Error Practice method for implementing BrokerWorkflow.
+ *
+ * */
 class BrokerWorkflow
 
 object BrokerWorkflow {

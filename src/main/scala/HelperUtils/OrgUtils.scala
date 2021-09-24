@@ -14,8 +14,11 @@ import org.cloudbus.cloudsim.vms.{Vm}
 
 import scala.jdk.CollectionConverters._
 
+/**
+ * Common Util contains method used by both Client and Org utils.
+ *
+ * */
 class OrgUtils
-
 object OrgUtils {
   val brokerConfig = ObtainConfigReference("instances") match {
     case Some(value) => value

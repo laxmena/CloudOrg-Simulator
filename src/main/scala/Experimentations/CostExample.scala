@@ -14,8 +14,11 @@ import org.cloudsimplus.builders.tables.CloudletsTableBuilder
 import java.util.Comparator
 import scala.jdk.CollectionConverters.*
 
+/**
+ * Experiments. Trial and Error Practice method for implementing BrokerWorkflow.
+ *
+ * */
 class CostExample
-
 object CostExample {
   val config = ObtainConfigReference("costExample") match {
     case Some(value) => value

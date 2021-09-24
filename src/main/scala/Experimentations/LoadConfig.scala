@@ -6,6 +6,11 @@ import com.typesafe.config.{Config, ConfigBeanFactory, ConfigFactory}
 
 import scala.jdk.CollectionConverters._
 
+/**
+ * Experiments. Trial and Error Practice method for loading config
+ * files using PureConfig
+ *
+ * */
 class LoadConfig
 
 object LoadConfig {

@@ -19,8 +19,9 @@ import scala.jdk.CollectionConverters.*
  *   Time and Space Shared: simulation6/timeandspace.conf
  *
  * */
+class Simulation6
 object Simulation6 {
-  val logger = CreateLogger(classOf[Simulation])
+  val logger = CreateLogger(classOf[Simulation6])
   val config = ObtainConfigReference("simulation6") match {
     case Some(value) => value
     case None => throw new RuntimeException("Cannot obtain a reference to the experiment config data.")
@@ -51,4 +52,3 @@ object Simulation6 {
     logger.info("---- Complete Simulation 6 Execution ----")
 }
 
-class Simulation6

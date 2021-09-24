@@ -19,8 +19,9 @@ import scala.jdk.CollectionConverters._
  *   Simple: simulation5/v4.conf
  *
  * */
+class Simulation5
 object Simulation5 {
-  val logger = CreateLogger(classOf[Simulation])
+  val logger = CreateLogger(classOf[Simulation5])
   val config = ObtainConfigReference("simulation5") match {
     case Some(value) => value
     case None => throw new RuntimeException("Cannot obtain a reference to the experiment config data.")
@@ -51,4 +52,3 @@ object Simulation5 {
     logger.info("---- Complete Simulation 5 Execution ----")
 }
 
-class Simulation5

@@ -18,6 +18,7 @@ import org.cloudbus.cloudsim.core.CloudSim
  *   Client Config File: simulation1/client.conf
  *
  * */
+class Simulation1
 object Simulation1 {
   val logger = CreateLogger(classOf[Simulation1])
   val SIM = "simulation1"
@@ -25,7 +26,6 @@ object Simulation1 {
     case Some(value) => value.getConfig(SIM)
     case None => throw new RuntimeException("Cannot obtain a reference to the experiment config data.")
   }
-
   @main def runSimulation1 =
     logger.info("Simulation 1 - IAAS Model")
 
@@ -36,4 +36,3 @@ object Simulation1 {
     logger.info("Finished Simulation 1...")
 }
 
-class Simulation1

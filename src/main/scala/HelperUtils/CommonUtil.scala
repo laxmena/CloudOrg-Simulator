@@ -12,6 +12,10 @@ import org.cloudbus.cloudsim.utilizationmodels.{UtilizationModel, UtilizationMod
 
 import scala.jdk.CollectionConverters._
 
+/**
+ * Common Util contains method used by both Client and Org utils.
+ *
+ * */
 class CommonUtil
 
 object CommonUtil {

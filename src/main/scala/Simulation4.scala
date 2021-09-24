@@ -17,6 +17,7 @@ import org.cloudbus.cloudsim.core.CloudSim
  *   Client Config File: simulation4/client.conf
  *
  * */
+class Simulation4
 object Simulation4 {
   val logger = CreateLogger(classOf[Simulation4])
   val SIM = "simulation4"
@@ -35,4 +36,3 @@ object Simulation4 {
     logger.info("Finished Simulation 4...")
 }
 
-class Simulation4

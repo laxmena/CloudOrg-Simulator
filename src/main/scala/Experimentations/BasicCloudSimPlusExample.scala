@@ -15,7 +15,12 @@ import scala.collection.JavaConverters.*
 
 class BasicCloudSimPlusExample
 
-// Singleton: Companion Object
+/**
+ * Experiments. Not for real simulation.
+ *
+ * BasicCloudSimPlus Example - Translated from Java Example to Scala.
+ *
+ * */
 object BasicCloudSimPlusExample:
   val config = ObtainConfigReference("cloudSimulator") match {
     case Some(value) => value
