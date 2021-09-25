@@ -33,7 +33,7 @@ paas = [{
 This example represents Client request to run 3 cloudlets, where each cloudlet uses 3 PEs(CPU Cores), with 2000 million instructions per second and size of 1GB.
 
 ## Results:
-![PAAS DataCenter Simulation Result](assets/Simulation2/paas.PNG)
+![PAAS DataCenter Simulation Result](assets/simulation2/paas.PNG)
 
 
 | description | value |

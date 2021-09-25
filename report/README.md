@@ -8,7 +8,7 @@
 5. [Multiple DataCenters Simulation](multiple-data-center-simulation.md)
 6. [Allocation Policy Comparison](allocation-policy.md)
 7. [Scheduling Policy Comparison](scheduling-policy.md)
-8. [Observations](obsrevations.md)
+8. [Other Observations](obsrevations.md)
 9. [Project Limitations](project-limitations.md)
 10. [Future Scope](future-scope.md)
 11. [References](references.md)
