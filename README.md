@@ -37,12 +37,9 @@ cd CloudOrg-Simulator
     ```shell
    sbt clean
    sbt compile
+   sbt run
    ```
-4. Select the Simulation that you want to run, and get the name of the main function of the simulation.
-
-    ```shell
-    sbt runMain runSimulation1 
-    ```
+4. SBT will show a list of Simulations available. Select to run simulations.
 
 ## Documentation
 
