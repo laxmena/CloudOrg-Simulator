@@ -1,7 +1,12 @@
 # Report: CloudOrg Simulator
 
-Report and Observations of CloudOrg Simulator. Please navigate through the index to find the screenshots, observations, interpretations of different experiments in this project.
+Author: **Lakshmanan Meiyappan**
 
+NetID: **lmeiya2**
+
+This project was done as part of **CS441 Engineering Distributed Objects For Cloud Computing** under Professor [Dr.Mark Grechanik](https://www.cs.uic.edu/~drmark) at the University of Illinois at Chicago.
+
+Find detailed observations, results and more information about project design here: **[CloudOrgSimulator - Report](report/README.md)**
 
 ### Index
 1. [Project Structure](project-structure.md)

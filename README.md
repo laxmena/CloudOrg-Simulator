@@ -50,7 +50,7 @@ Find the ScalaDoc Documentation of this project here: [CloudOrg-Simulator Docume
 
 ## Report
 
-This project was done as part of **CS441 Engineering Distributed Objects For Cloud Computing** under Professor [Dr.Mark Grechanik](https://www.cs.uic.edu/~drmark) at the University of Illiois at Chicago.
+This project was done as part of **CS441 Engineering Distributed Objects For Cloud Computing** under Professor [Dr.Mark Grechanik](https://www.cs.uic.edu/~drmark) at the University of Illinois at Chicago.
 
 Find detailed observations, results and more information about project design here: **[CloudOrgSimulator - Report](report/README.md)**
 
